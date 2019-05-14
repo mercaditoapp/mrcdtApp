@@ -1,21 +1,26 @@
 import React from 'react';
-import { StyleSheet, Text, View, ActivityIndicator, Image, ScrollView } from 'react-native';
+import { StyleSheet, TouchableOpacity, Text, View, ActivityIndicator, Image, ScrollView } from 'react-native';
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
 
 export default class SettingsScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Recetas',
-  };
+    static navigationOptions = {
+        title: 'Recetas',
+    };
 
-   constructor(props) {
+    constructor(props) {
         super(props);
         this.state = {
             isLoading: true,
             dataSource: null,
         }
     }
+
     componentDidMount() {
-        return fetch('http://34.210.212.235:8080/mrcdtAPI/oauth/receta/findAll', {
+        this.fetchData();
+    }
+
+    fetchData() {
+        return fetch('http://18.220.109.49:8080/mrcdtAPI/oauth/receta/findAll', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -32,6 +37,7 @@ export default class SettingsScreen extends React.Component {
                 console.log(error)
             });
     }
+
     render() {
         if (this.state.isLoading) {
             return (
@@ -40,18 +46,20 @@ export default class SettingsScreen extends React.Component {
                 </View>
             )
         } else {
-            let recetas = this.state.dataSource.map((val, key) => {
-                return <Card
-                    key={key}
-                    style={styles.item}>
-                    <Image
-                        style={{ width: 200, height: 200 }}
-                        source={{ uri: val.imagen }}
-                    />
-                    <Text>{val.nombre}</Text>
-                    <Text>{val.descripcion}</Text>
-                    <Text>$130.00 MXN</Text>
-                </Card>
+            let recetas = this.state.dataSource.map((item, key) => {
+                return <TouchableOpacity key={key} activeOpacity={.9} onPress={() => this.props.navigation.push('MoreSettings', {
+                    otherParam: item.nombre
+                })} >
+                    <Card
+                        image={{ uri: item.imagen }}
+                    >
+                        <Text style={{ marginBottom: 10 }}>
+                            {item.nombre}
+                        </Text>
+                        <Text>{item.descripcion}</Text>
+
+                    </Card>
+                </TouchableOpacity>
             });
             return (
                 <ScrollView style={styles.container}>
@@ -68,11 +76,5 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-    },
-    item: {
-        flex: 1,
-        margin: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee'
     }
 });

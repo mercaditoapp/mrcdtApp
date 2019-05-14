@@ -2,10 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, ActivityIndicator, Image, ScrollView } from 'react-native';
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
 
-export default class LinksScreen extends React.Component {
-  static navigationOptions = {
-    title: 'Recetas',
-  };
+export default class SettingsScreen1 extends React.Component {
+  static navigationOptions = ({ navigation }) => ({ title: navigation.state.params.otherParam})
 
    constructor(props) {
         super(props);
@@ -15,7 +13,7 @@ export default class LinksScreen extends React.Component {
         }
     }
     componentDidMount() {
-        return fetch('http://18.220.109.49:8080/mrcdtAPI/oauth/receta/findByNombreUrl/pizza', {
+        return fetch('http://34.210.212.235:8080/mrcdtAPI/oauth/receta/findAll', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -33,6 +31,9 @@ export default class LinksScreen extends React.Component {
             });
     }
     render() {
+        const { navigation } = this.props;
+        const otherParam = navigation.getParam('otherParam', 'some default value');
+
         if (this.state.isLoading) {
             return (
                 <View style={styles.container}>
@@ -40,16 +41,25 @@ export default class LinksScreen extends React.Component {
                 </View>
             )
         } else {
-            let receta = this.state.dataSource.map((val, key) => {
-                return 
+            console.log(this.state.dataSource);
+
+            let recetas = this.state.dataSource.map((val, key) => {
+                return <Card
+                    key={key}
+                    style={styles.item}>
                     <Image
                         style={{ width: 200, height: 200 }}
                         source={{ uri: val.imagen }}
                     />
+                    <Text>Receta: {JSON.stringify(otherParam)}</Text>
+                    {/* <Text>{val.nombre}</Text>
+                    <Text>{val.descripcion}</Text>
+                    <Text>$130.00 MXN</Text> */}
+                </Card>
             });
             return (
                 <ScrollView style={styles.container}>
-                  {receta}
+                    {recetas}
                 </ScrollView>
             );
         }

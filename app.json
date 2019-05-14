@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "wireframe",
+    "name": "Mercadito.",
     "description": "A very interesting project.",
-    "slug": "wireframe",
+    "slug": "Mercadito",
     "privacy": "public",
     "sdkVersion": "29.0.0",
     "platforms": ["ios", "android"],
@@ -12,7 +12,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#b92147"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -22,6 +22,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "io.mercadito"
     }
   }
 }
